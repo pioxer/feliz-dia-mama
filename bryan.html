@@ -1,57 +1,145 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saludo para Mamá</title>
+    <title>Saludo para Mamá - bryan</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-            font-family: Arial, sans-serif;
+            padding: 20px;
         }
+        
         .container {
-            text-align: center;
-            padding: 30px;
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
         }
-        h1 {
-            color: #ff6b6b;
+        
+        .emoji {
+            font-size: 80px;
             margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
         }
-        button {
-            background: #ff6b6b;
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        h1 {
+            color: #764ba2;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .mensaje {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        
+        .boton-audio {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
             padding: 15px 30px;
             font-size: 18px;
             border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: inline-block;
         }
-        button:hover {
+        
+        .boton-audio:hover {
             transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(118, 75, 162, 0.4);
+        }
+        
+        .boton-audio.reproduciendo {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        audio {
+            display: none;
+        }
+        
+        .corazones {
+            font-size: 30px;
+            margin-top: 20px;
+            opacity: 0.7;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🎉 ¡Tienes un mensaje especial! 🎉</h1>
-        <p>Haz clic para escuchar tu saludo:</p>
-        <button onclick="reproducirAudio()">▶️ Escuchar Mensaje</button>
-        <audio id="audio" src="audios/bryan.mp3"></audio>
+        <div class="emoji">👦</div>
+        <h1>¡Mamá, tengo un mensaje para ti!</h1>
+        <p class="mensaje">
+            Tu hijo <strong>Juan</strong> te dejó un saludo muy especial. 
+            Haz clic en el botón para escucharlo 💝
+        </p>
+        
+        <button class="boton-audio" id="botonReproducir" onclick="reproducirAudio()">
+            ▶️ Escuchar Saludo
+        </button>
+        
+        <audio id="audioSaludo">
+            <source src="audios/bryan.mp3" type="audio/mpeg">
+            Tu navegador no soporta audio
+        </audio>
+        
+        <div class="corazones">💕 💖 💕</div>
     </div>
-    
+
     <script>
         function reproducirAudio() {
-            document.getElementById('audio').play();
+            const audio = document.getElementById('audioSaludo');
+            const boton = document.getElementById('botonReproducir');
+            
+            if (audio.paused) {
+                audio.play();
+                boton.textContent = '🔊 Reproduciendo...';
+                boton.classList.add('reproduciendo');
+                
+                audio.onended = function() {
+                    boton.textContent = '▶️ Escuchar de nuevo';
+                    boton.classList.remove('reproduciendo');
+                };
+            } else {
+                audio.pause();
+                audio.currentTime = 0;
+                boton.textContent = '▶️ Escuchar Saludo';
+                boton.classList.remove('reproduciendo');
+            }
         }
+        
+        // Reproducir automáticamente al cargar (opcional)
+        // window.onload = function() {
+        //     setTimeout(reproducirAudio, 1000);
+        // }
     </script>
 </body>
 </html>
